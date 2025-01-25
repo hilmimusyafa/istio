@@ -49,12 +49,34 @@ Operator keamanan dapat dengan mudah menerapkan keamanan layanan-ke-layanan, ter
 3. Meningkatkan performa aplikasi
 Terapkan praktik terbaik, seperti peluncuran canary, dan dapatkan visibilitas mendalam ke aplikasi untuk mengidentifikasi area fokus guna meningkatkan performa.
 
-### 1.5 Komponen Utama Istio : Pilot, Mixer, Citadel, Galley
+### 1.5 Komponen Utama Istio
+
+#### 1.5.1 Envoy Proxy
+
+Proxy berbasis sidecar yang berfungsi sebagai data plane untuk mengelola lalu lintas antar layanan. Envoy menangani routing, load balancing, enkripsi (mTLS), dan observabilitas.
+
+#### 1.5.2 Istiod (Control Plane)
 
 1. Pilot
 
+Mengatur dan mengelola konfigurasi routing untuk proxy Envoy. Pilot di Istio juga Menyediakan mekanisme service discovery sehingga layanan dapat saling menemukan, dan Memberikan konfigurasi trafik seperti load balancing, failover, dan routing ke proxy sidecar.
+
+Contoh penggunaan : Mengatur versi layanan tertentu yang hanya digunakan untuk pengujian (canary deployment).
+
 2. Mixer
+
+Berfungsi menyediakan fitur observability, policy enforcement, dan telemetri. Mixer juga berperan mengumpulkan metrik, log, dan jejak (tracing) dari lalu lintas layanan, juga Menegakkan kebijakan seperti pembatasan kuota dan autentikasi.
 
 3. Citadel
 
-4. Galley
+Citadel merupakan bagian yang menyediakan keamanan dengan fitur seperti autentikasi dan enkripsi. Citadel juga mengelola sertifikat TLS/SSL untuk memastikan komunikasi antar layanan terenkripsi.
+
+Contoh Penggunaan: Semua komunikasi antar layanan berjalan menggunakan protokol HTTPS yang terenkripsi.
+
+#### 1.5.3 Gateway
+
+Istio Gateway memungkinkan pengelolaan lalu lintas masuk (ingress) dan keluar (egress) dari mesh. Gateway juga membantu mengamankan dan mengatur akses ke layanan dari luar.
+
+#### 1.5.4 Operator
+
+Digunakan untuk mempermudah instalasi dan pengelolaan Istio di cluster Kubernetes. Mengotomatiskan proses deployment dan pembaruan.
