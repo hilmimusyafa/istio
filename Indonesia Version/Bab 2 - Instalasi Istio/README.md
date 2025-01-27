@@ -117,7 +117,7 @@ The difference between profiles:
 
 Outputnya dalam format diff tradisional, termasuk garis yang ditandai dengan + atau - untuk menunjukkan perbedaan antara dua profil.
 
-### 2.5 Istio Operator API dan IstioOperator
+### 2.3 Istio Operator API dan IstioOperator
 
 Istio Operator API adalah mekanisme yang memungkinkan pengguna untuk mengelola instalasi dan konfigurasi Istio secara deklaratif. Sedangkan, IstioOperator Resource adalah file YAML yang mendefinisikan keadaan yang diinginkan (desired state) dari komponen-komponen Istio.
 
@@ -141,7 +141,7 @@ $ istioctl install -f <yaml-of-kuberntes-cluster>
 
 > `<yaml-of-kuberntes-cluster>` harap di ubah sesuai dengan penamaan file atau lamat file/
 
-### 2.3 Instalasi Istio di Kubernetes menggunakan IstioOperator (Default Way)
+### 2.4 Instalasi Istio di Kubernetes menggunakan IstioOperator (Default Way)
 
 1. Memastikan ada Cluster yang aktif
 
@@ -205,10 +205,117 @@ spec:
 $ kubectl get pods -n istio-system
 ``` 
 
-5. Mengaktifkan Injeksi Sidecar
+### 2.5 Menginjeksi sidecar secara otomatis
 
+1. Mengaktifkan Injeksi sidecar otomatis
 
-### 2.5 Instalasi Istio dengan Helm
+Untuk mengaktifkan injeksi otomatis di sebuah namespace, jalankan perintah :
+
+```bash
+$ kubectl label namespace <namespace> istio-injection=enabled
+```
+
+> `<namespace>` pastikan di rubah dengan nammespace yang ada di kubernetes
+
+Ini akan memberi label pada namespace tersebut sehingga Istio secara otomatis menyuntikkan sidecar proxy ke setiap Pod yang dibuat di namespace tersebut.
+
+2. Mmeverifikasi injeksi sidecar
+
+```bash
+$ kubectl get namespace -L istio-injection
+```
+
+3. Membuat Deployment dan Memverifikasi Injeksi (dengan Nginx)
+
+```bash
+$ kubectl create deploy my-nginx --image=nginx
+```
+
+4. Periksa Pod yang dibuat 
+
+```bash
+$ kubectl get po
+```
+
+Output akan menunjukkan bahwa Pod memiliki 2 container (misalnya, 2/2 di kolom READY):
+
+- Container 1 : nginx (aplikasi utama).
+- Container 2 : istio-proxy (sidecar proxy yang disuntikkan oleh Istio).
+
+```bash
+$ kubectl describe po <pod-name>
+```
+
+> `<pod-name>` diubah sesuai yang ada di sistem
+
+Output akan menampilkan informasi tentang kedua container (nginx dan istio-proxy) serta event yang terjadi selama pembuatan Pod.
+
+5. Membersihkan Deployment
+
+```bash
+$ kubectl delete deployment <deployment-name>
+```
+
+> '<dpyolment-name>' pastikan ada sesuai yang ada di sistem .
+
+### 2.6 Memperbarui Instalasi Istio dan Menghapus Instalasi Istio dengan IstioOperator
+
+Untuk memperbarui instalasi Istio, Developer dapat memodifikasi resource IstioOperator yang sudah ada dan menerapkannya kembali ke cluster.
+Contoh : Jika ingin menghapus egress gateway, developer dapat mengubah file YAML IstioOperator seperti ini :
+
+```yaml
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: demo-istio-install
+spec:
+  profile: demo
+  components:
+    egressGateways:
+    - name: istio-egressgateway
+      enabled: false
+```
+
+Simpan file ini sebagai iop-egress.yaml dan terapkan menggunakan perintah:
+
+```bash
+$ istioctl install -f iop-egress.yaml
+```
+
+Setelah diterapkan, egress gateway akan dihapus dari cluster.
+
+Disini juga bisa membuat resource IstioOperator terpisah untuk mengelola komponen tertentu secara independen
+
+Contoh : Membuat resource untuk internal ingress gateway (hanya berlaku untuk cluster GCP)
+
+```bash
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: internal-gateway-only
+  namespace: istio-system
+spec:
+  profile: empty
+  components:
+    ingressGateways:
+      - namespace: some-namespace
+        name: ilb-gateway
+        enabled: true
+        k8s:
+          serviceAnnotations:
+            networking.gke.io/load-balancer-type: "Internal"
+```
+
+Untuk menghapus instalasi Istio sepenuhnya, gunakan perintah :
+
+```
+$ istioctl uninstall --purge
+```
+
+Perintah ini akan menghapus semua komponen Istio dari cluster.
+
+### 2.7 Instalasi Istio dengan Helm
 
 Sebelumnya, mungkin pemaknaan, apa itu Helm? Helm merupakan aplikasi open source package manager untuk Kubernetes yang memudah instalasi dan pembatuan aplikasi kompleks.
 
