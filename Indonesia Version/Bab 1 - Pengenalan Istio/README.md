@@ -1,5 +1,7 @@
 ## Bab 1 : Pengenalan Istio
 
+![Istio](https://hackmd.io/_uploads/rkECKE7dke.png)
+
 ### 1.1 Konsep Dasar Service Mesh
 
 Service Mesh adalah arsitektur jaringan yang dirancang untuk menangani komunikasi antar layanan (service-to-service) dalam lingkungan microservices. 
