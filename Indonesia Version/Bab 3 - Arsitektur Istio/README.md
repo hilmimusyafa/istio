@@ -20,7 +20,7 @@ Envoy proxy digunakan sebagai sidecar untuk layanan, menambahkan berbagai fitur 
 
 Penerapan sidecar ini memungkinkan Istio untuk menegakkan keputusan kebijakan dan mengekstrak telemetri lengkap yang dapat dikirim ke sistem pemantauan untuk memberikan informasi tentang perilaku seluruh jaringan.
 
-Model proxy sidecar juga memungkinkan Anda untuk menambahkan kapabilitas Istio ke penerapan yang sudah ada tanpa mengharuskan Anda untuk merancang ulang atau menulis ulang kode.
+Model proxy sidecar juga memungkinkan untuk menambahkan kapabilitas Istio ke penerapan yang sudah ada tanpa mengharuskan untuk merancang ulang atau menulis ulang kode.
 
 Beberapa fitur dan tugas Istio yang didukung oleh Envoy proxy meliputi :
 
@@ -33,7 +33,7 @@ Beberapa fitur dan tugas Istio yang didukung oleh Envoy proxy meliputi :
 
 Istiod menyediakan penemuan layanan, konfigurasi, dan manajemen sertifikat. Ia mengonversi aturan perutean tingkat tinggi ke konfigurasi Envoy dan menyebarkannya ke sidecar saat runtime. Istiod mengabstraksi penemuan layanan dari berbagai lingkungan (seperti Kubernetes atau VM) ke format standar yang kompatibel dengan Envoy.
 
-Anda dapat menggunakan API Manajemen Lalu Lintas Istio untuk mengontrol lalu lintas secara lebih terperinci. Istiod juga memungkinkan autentikasi layanan-ke-layanan dan pengguna akhir yang kuat, serta enkripsi lalu lintas dengan mTLS. Operator dapat memberlakukan kebijakan keamanan berdasarkan identitas layanan, bukan pengenal jaringan, dan menggunakan fitur otorisasi untuk mengontrol akses ke layanan.
+Juga dapat menggunakan API Manajemen Lalu Lintas Istio untuk mengontrol lalu lintas secara lebih terperinci. Istiod juga memungkinkan autentikasi layanan-ke-layanan dan pengguna akhir yang kuat, serta enkripsi lalu lintas dengan mTLS. Operator dapat memberlakukan kebijakan keamanan berdasarkan identitas layanan, bukan pengenal jaringan, dan menggunakan fitur otorisasi untuk mengontrol akses ke layanan.
 
 Sebagai Otoritas Sertifikat (CA), Istiod menghasilkan sertifikat untuk memastikan komunikasi aman di bidang data.
 
@@ -50,4 +50,4 @@ Gateway dan VirtualService adalah komponen kunci dalam manajemen lalu lintas di 
 - Gateway : Gateway mengonfigurasi load balancer untuk mengelola lalu lintas masuk atau keluar dari mesh. Ini menentukan port yang akan diekspos, protokol yang digunakan, dan pengaturan TLS. Gateway berfungsi sebagai titik masuk untuk lalu lintas HTTP/TCP ke dalam mesh. 
 - VirtualService : VirtualService mendefinisikan seperangkat aturan perutean lalu lintas yang diterapkan saat host tertentu diakses. Setiap aturan perutean menentukan kriteria pencocokan untuk lalu lintas dengan protokol tertentu. Jika lalu lintas sesuai dengan kriteria tersebut, maka akan diarahkan ke layanan tujuan yang ditentukan dalam registry. VirtualService memungkinkan kontrol perutean yang lebih granular, seperti implementasi skenario canary release atau A/B testing. 
 
-Dengan menggabungkan Gateway dan VirtualService, Anda dapat mengontrol bagaimana lalu lintas dari luar mesh diarahkan ke layanan internal, serta mengelola perutean lalu lintas di dalam mesh itu sendiri.
+Dengan menggabungkan Gateway dan VirtualService, dapat mengontrol bagaimana lalu lintas dari luar mesh diarahkan ke layanan internal, serta mengelola perutean lalu lintas di dalam mesh itu sendiri.

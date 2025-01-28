@@ -214,7 +214,6 @@ Untuk mengaktifkan injeksi otomatis di sebuah namespace, jalankan perintah :
 ```bash
 $ kubectl label namespace <namespace> istio-injection=enabled
 ```
-
 > `<namespace>` pastikan di rubah dengan nammespace yang ada di kubernetes
 
 Ini akan memberi label pada namespace tersebut sehingga Istio secara otomatis menyuntikkan sidecar proxy ke setiap Pod yang dibuat di namespace tersebut.
